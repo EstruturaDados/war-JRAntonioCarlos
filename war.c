@@ -15,18 +15,36 @@
 // ============================================================================
 
 // Inclusão das bibliotecas padrão necessárias para entrada/saída, alocação de memória, manipulação de strings e tempo.
-
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 // --- Constantes Globais ---
 // Definem valores fixos para o número de territórios, missões e tamanho máximo de strings, facilitando a manutenção.
+#define MAX_TERRITORIO 5
+#define MAX_MISSOES 10
+#define MAX_STRING 50
 
 // --- Estrutura de Dados ---
 // Define a estrutura para um território, contendo seu nome, a cor do exército que o domina e o número de tropas.
-
+struct Territorio{
+    char nomedoTerritorio[50];
+    char cordoexercito[20];
+    int numero_de_tropas;
+};
+// FUNÇÃO LIMPAR O BUFFER DE ENTRADA
+void LimparBufferDeEntrada(){
+    int c;
+    while ((c = getchar()) != '\n'&& c != EOF);
+ 
+    }
 // --- Protótipos das Funções ---
 // Declarações antecipadas de todas as funções que serão usadas no programa, organizadas por categoria.
 // Funções de setup e gerenciamento de memória:
+struct Territorio* alocarMapa(int quantidade);
+void liberarMemoria(struct Territorio* mapa);
 // Funções de interface com o usuário:
 // Funções de lógica principal do jogo:
+int sortearMissao(int maxMissoes);
 // Função utilitária:
 
 // --- Função Principal (main) ---
@@ -38,23 +56,50 @@ int main() {
     // - Aloca a memória para o mapa do mundo e verifica se a alocação foi bem-sucedida.
     // - Preenche os territórios com seus dados iniciais (tropas, donos, etc.).
     // - Define a cor do jogador e sorteia sua missão secreta.
-
-    // 2. Laço Principal do Jogo (Game Loop):
-    // - Roda em um loop 'do-while' que continua até o jogador sair (opção 0) ou vencer.
-    // - A cada iteração, exibe o mapa, a missão e o menu de ações.
-    // - Lê a escolha do jogador e usa um 'switch' para chamar a função apropriada:
-    //   - Opção 1: Inicia a fase de ataque.
-    //   - Opção 2: Verifica se a condição de vitória foi alcançada e informa o jogador.
-    //   - Opção 0: Encerra o jogo.
-    // - Pausa a execução para que o jogador possa ler os resultados antes da próxima rodada.
+struct Territorio* mapa = alocarMapa(MAX_TERRITORIO);
+int missaoID = sortearMissao(MAX_MISSOES);
+char corTropa[MAX_STRING] = "Vermelho";
+    // 2. Cadastro dos territórios (executa uma vez)
+    struct Territorio territorios[5];
+    printf("\nVamos cadastrar os 5 territórios iniciais\n");
+    for (int i = 0; i < 5; i++) {
+        printf("Digite o nome do território %d: ", i+1);
+        fgets(territorios[i].nomedoTerritorio, sizeof(territorios[i].nomedoTerritorio), stdin);
+        territorios[i].nomedoTerritorio[strcspn(territorios[i].nomedoTerritorio, "\n")] = 0;
+        printf("Digite a cor do exército do território %d: ", i+1);
+        fgets(territorios[i].cordoexercito, sizeof(territorios[i].cordoexercito), stdin);
+        territorios[i].cordoexercito[strcspn(territorios[i].cordoexercito, "\n")] = 0;
+        printf("Digite o número de tropas do território %d: ", i+1);
+        scanf("%d", &territorios[i].numero_de_tropas);
+        LimparBufferDeEntrada();
+    }
+    // Exibe os territórios cadastrados
+    for (int i = 0; i < 5; i++) {
+        printf("territorio%d: %s, cor do exercito: %s, numero de tropas: %d\n",
+            i+1, territorios[i].nomedoTerritorio, territorios[i].cordoexercito, territorios[i].numero_de_tropas);
+    }
 
     // 3. Limpeza:
     // - Ao final do jogo, libera a memória alocada para o mapa para evitar vazamentos de memória.
-
+    liberarMemoria(mapa);
     return 0;
 }
-
 // --- Implementação das Funções ---
+// Implementações básicas (stubs) para permitir compilação
+struct Territorio* alocarMapa(int quantidade) {
+    // Apenas aloca memória para o vetor de territórios
+    return (struct Territorio*)calloc(quantidade, sizeof(struct Territorio));
+}
+
+void liberarMemoria(struct Territorio* mapa) {
+    // Libera a memória alocada
+    free(mapa);
+}
+
+int sortearMissao(int maxMissoes) {
+    // Retorna sempre 0 como missão sorteada (stub)
+    return 0;
+}
 
 // alocarMapa():
 // Aloca dinamicamente a memória para o vetor de territórios usando calloc.
