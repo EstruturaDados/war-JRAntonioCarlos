@@ -78,7 +78,37 @@ char corTropa[MAX_STRING] = "Vermelho";
         printf("territorio%d: %s, cor do exercito: %s, numero de tropas: %d\n",
             i+1, territorios[i].nomedoTerritorio, territorios[i].cordoexercito, territorios[i].numero_de_tropas);
     }
-
+    //fase de ataque
+    int origem, destino;
+    printf("\nFase de Ataque\n");
+    printf("Escolha o território atacante (1-5): ");
+    scanf("%d", &origem);
+    printf("Escolha o território defensor (1-5): ");
+    scanf("%d", &destino);
+   //resulto doda batalha
+    int atacante = origem;
+    int defensor = destino;
+   printf("O território %s atacou o território %s\n", territorios[atacante-1].nomedoTerritorio, territorios[defensor-1].nomedoTerritorio);
+   if(rand()%2==0){
+    printf("O território %s venceu a batalha!\n", territorios[atacante-1].nomedoTerritorio);
+    territorios[defensor-1].numero_de_tropas--;
+   } else {
+    printf("O território %s venceu a batalha!\n", territorios[defensor-1].nomedoTerritorio);
+    territorios[atacante-1].numero_de_tropas--;
+   }
+   //atualiza as 5 tropas
+   for (int i = 0; i < 5; i++) {
+    if(territorios[i].numero_de_tropas<0) territorios[i].numero_de_tropas=0;
+   }
+   // Exibe os territórios atualizados
+    for (int i = 0; i < 5; i++) {
+        printf("territorio%d: %s, cor do exercito: %s, numero de tropas: %d\n",
+            i+1, territorios[i].nomedoTerritorio, territorios[i].cordoexercito, territorios[i].numero_de_tropas);
+    }
+    //proximo passo
+    printf("pressione ENTER para o próximo turno...");
+    getchar();
+            
     // 3. Limpeza:
     // - Ao final do jogo, libera a memória alocada para o mapa para evitar vazamentos de memória.
     liberarMemoria(mapa);
